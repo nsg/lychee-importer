@@ -33,7 +33,7 @@ artisan lychee:sync --no-interaction -- /tmp/lychee-importer-process
 rm "/tmp/lychee-importer-process/Album A"
 
 # Album "Album B"
-artisan lychee:sync --album_id=16496023798232 --no-interaction -- "/images/Album B"
+artisan lychee:sync --album_id=16496023798232 --skip_duplicates=1 --no-interaction -- "/images/Album B"
 
 ```
 
