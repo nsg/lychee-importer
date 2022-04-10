@@ -22,7 +22,7 @@ This will output shell commands in the form below to a script in `{OUTPUT_DIR}/l
 #!/bin/bash
 
 artisan() {
-  /usr/bin/docker exec root_lychee_1 php artisan $@
+  /usr/bin/docker exec root_lychee_1 php artisan "$@"
 }
 
 mkdir -p /tmp/lychee-importer-process
