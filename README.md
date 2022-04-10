@@ -17,7 +17,7 @@ docker run -ti \
 This will output shell commands in the form below that you can pipe to bash, save to a file or do whatever is needed.
 
 ```bash
-/usr/bin/docker exec lychee php artisan lychee:sync --album_id=1234 --import_via_symlink --skip_duplicates -- "/images"
-/usr/bin/docker exec lychee php artisan lychee:sync --album_id=5678 --import_via_symlink --skip_duplicates -- "/images"
+/usr/bin/docker exec lychee php artisan lychee:sync --album_id=1234 --import_via_symlink --skip_duplicates -- "/images/dir1"
+/usr/bin/docker exec lychee php artisan lychee:sync --album_id=5678 --import_via_symlink --skip_duplicates -- "/images/dir2"
 ... and so on
 ```
