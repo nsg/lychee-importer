@@ -1,11 +1,14 @@
 import requests
 import os
 import json
+import glob
 
 LYCHEE_SERVER_URL=os.getenv("LYCHEE_SERVER_URL")
 LYCHEE_API_KEY=os.getenv("LYCHEE_API_KEY")
 LYCHEE_USER=os.getenv("LYCHEE_USER")
 LYCHEE_PASSWORD=os.getenv("LYCHEE_PASSWORD")
+LYCHEE_CONTAINER_NAME=os.getenv("LYCHEE_CONTAINER_NAME")
+SOURCE_IMAGES=os.getenv("SOURCE_IMAGES")
 
 HEADERS = {
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -29,9 +32,17 @@ def albums(cookies):
     r = lychee_request("Albums::get", {}, cookies)
     return json.loads(r.text)
 
+def scan_images():
+    folders = glob.glob(f"{SOURCE_IMAGES}/*")
+    return [os.path.basename(folder) for folder in folders]
+
 cookies = login()
 resp = albums(cookies)
 
+lychee_albums = {}
 for album in resp["albums"]:
-    print(album['id'])
-    print(album['title'])
+    lychee_albums[album['title']] = album['id']
+
+for album in scan_images():
+    album_id = lychee_albums.get(album, 0)
+    print(f"/usr/bin/docker exec {LYCHEE_CONTAINER_NAME} php artisan lychee:sync --album_id={album_id} --import_via_symlink --skip_duplicates -- \"{SOURCE_IMAGES}/{album}\"")
