@@ -9,6 +9,7 @@ LYCHEE_USER=os.getenv("LYCHEE_USER")
 LYCHEE_PASSWORD=os.getenv("LYCHEE_PASSWORD")
 LYCHEE_CONTAINER_NAME=os.getenv("LYCHEE_CONTAINER_NAME")
 SOURCE_IMAGES=os.getenv("SOURCE_IMAGES")
+OUTPUT_DIR=os.getenv("OUTPUT_DIR")
 
 HEADERS = {
     "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
@@ -43,6 +44,8 @@ lychee_albums = {}
 for album in resp["albums"]:
     lychee_albums[album['title']] = album['id']
 
+f = open(f"{OUTPUT_DIR}/lychee-importer.sh", "w")
 for album in scan_images():
     album_id = lychee_albums.get(album, 0)
-    print(f"/usr/bin/docker exec {LYCHEE_CONTAINER_NAME} php artisan lychee:sync --album_id={album_id} --import_via_symlink --skip_duplicates -- \"{SOURCE_IMAGES}/{album}\"")
+    f.write(f"/usr/bin/docker exec {LYCHEE_CONTAINER_NAME} php artisan lychee:sync --album_id={album_id} --import_via_symlink --skip_duplicates -- \"{SOURCE_IMAGES}/{album}\"")
+f.close()

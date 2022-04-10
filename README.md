@@ -10,11 +10,13 @@ docker run -ti \
     -e LYCHEE_PASSWORD="secret-password" \
     -e LYCHEE_CONTAINER_NAME="lychee" \
     -e SOURCE_IMAGES="/images" \
+    -e OUTPUT_DIR="/out" \
     -v /mnt/images:/images \
+    -v /mnt/out:/out \
     ghcr.io/nsg/lychee-importer:master
 ```
 
-This will output shell commands in the form below that you can pipe to bash, save to a file or do whatever is needed.
+This will output shell commands in the form below to a script in `{OUTPUT_DIR}/lychee-importer.sh`
 
 ```bash
 /usr/bin/docker exec lychee php artisan lychee:sync --album_id=1234 --import_via_symlink --skip_duplicates -- "/images/dir1"
