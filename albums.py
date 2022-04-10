@@ -52,7 +52,7 @@ for album in scan_images():
     album_id = lychee_albums.get(album, None)
     f.write(f"# Album \"{album}\"\n")
     if album_id:
-        f.write(f"artisan lychee:sync --album_id={album_id} --no-interaction -- \"{SOURCE_IMAGES}/{album}\"\n\n")
+        f.write(f"artisan lychee:sync --album_id={album_id} --skip_duplicates=1 --no-interaction -- \"{SOURCE_IMAGES}/{album}\"\n\n")
     else:
         f.write(f"ln -s \"{SOURCE_IMAGES}/{album}\" \"/tmp/lychee-importer-process/{album}\"\n")
         f.write(f"artisan lychee:sync --no-interaction -- /tmp/lychee-importer-process\n")
