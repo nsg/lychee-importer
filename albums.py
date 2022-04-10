@@ -46,7 +46,7 @@ for album in resp["albums"]:
 
 f = open(f"{OUTPUT_DIR}/lychee-importer.sh", "w")
 f.write("#!/bin/bash\n\n")
-f.write(f"artisan() {{\n  /usr/bin/docker exec {LYCHEE_CONTAINER_NAME} php artisan $@\n}}\n\n")
+f.write(f"artisan() {{\n  /usr/bin/docker exec {LYCHEE_CONTAINER_NAME} php artisan \"$@\"\n}}\n\n")
 f.write("mkdir -p /tmp/lychee-importer-process\n\n")
 for album in scan_images():
     album_id = lychee_albums.get(album, None)
