@@ -46,16 +46,17 @@ for album in resp["albums"]:
 
 f = open(f"{OUTPUT_DIR}/lychee-importer.sh", "w")
 f.write("#!/bin/bash\n\n")
+f.write(f"artisan() {{\n  /usr/bin/docker exec {LYCHEE_CONTAINER_NAME} php artisan $@\n}}\n\n")
 f.write("mkdir -p /tmp/lychee-importer-process\n\n")
 for album in scan_images():
     album_id = lychee_albums.get(album, None)
+    f.write(f"# Album \"{album}\"\n")
     if album_id:
-        album_str = f"--album_id={album_id}"
+        f.write(f"artisan lychee:sync --album_id={album_id} --import_via_symlink --skip_duplicates -- \"{SOURCE_IMAGES}/{album}\"\n\n")
     else:
-        album_str = ""
+        f.write(f"ln -s \"{SOURCE_IMAGES}/{album}\" \"/tmp/lychee-importer-process/{album}\"\n")
+        f.write(f"artisan lychee:sync --import_via_symlink --skip_duplicates -- /tmp/lychee-importer-process\n")
+        f.write(f"rm \"/tmp/lychee-importer-process/{album}\"\n\n")
 
-    f.write(f"ln -s \"{SOURCE_IMAGES}/{album}\" \"/tmp/lychee-importer-process/{album}\"\n")
-    f.write(f"/usr/bin/docker exec {LYCHEE_CONTAINER_NAME} php artisan lychee:sync {album_str} --import_via_symlink --skip_duplicates -- /tmp/lychee-importer-process\n")
-    f.write(f"rm \"/tmp/lychee-importer-process/{album}\"\n\n")
 f.close()
 os.chmod(f"{OUTPUT_DIR}/lychee-importer.sh", 0o755)
