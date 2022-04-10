@@ -29,11 +29,11 @@ mkdir -p /tmp/lychee-importer-process
 
 # Album "Album A"
 ln -s "/images/Album A" "/tmp/lychee-importer-process/Album A"
-artisan lychee:sync --import_via_symlink --skip_duplicates -- /tmp/lychee-importer-process
+artisan lychee:sync --skip_duplicates -- /tmp/lychee-importer-process
 rm "/tmp/lychee-importer-process/Album A"
 
 # Album "Album B"
-artisan lychee:sync --album_id=16496023798232 --import_via_symlink --skip_duplicates -- "/images/Album B"
+artisan lychee:sync --album_id=16496023798232 --skip_duplicates -- "/images/Album B"
 
 ```
 
